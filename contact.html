@@ -11,7 +11,64 @@
       <link rel="stylesheet" href="assets/css/styles.css">
 
       <title>Portfolio  </title>
-	  
+	  <script>
+// Defining a function to display error message
+function printError(elemId, hintMsg) {
+    document.getElementById(elemId).innerHTML = hintMsg;
+}
+
+// Defining a function to validate form 
+function validateForm() {
+    // Retrieving the values of form elements 
+    let name = document.contactForm.name.value;
+    let email = document.contactForm.email.value;
+   
+   
+    
+	// Defining error variables with a default value
+    let nameErr = emailErr = true;
+    
+    // Validate name
+    if(name == "") {
+        printError("nameErr", "Please enter your name");
+    } else {
+        let regex = /^[a-zA-Z\s]+$/;                
+        if(regex.test(name) === false) {
+            printError("nameErr", "Please enter a valid name");
+        } else {
+            printError("nameErr", "");
+            nameErr = false;
+        }
+    }
+    
+    // Validate email address
+    if(email == "") {
+        printError("emailErr", "Please enter your email address");
+    } else {
+        // Regular expression for basic email validation
+        let regex = /^\S+@\S+\.\S+$/;
+        if(regex.test(email) === false) {
+            printError("emailErr", "Please enter a valid email address");
+        } else{
+            printError("emailErr", "");
+            emailErr = false;
+        }
+    }
+
+    // Prevent the form from being submitted if there are any errors
+    if((nameErr || emailErr ) == true) {
+       return false;
+    } else {
+        // Creating a string from input data for preview
+        let dataPreview = "You've entered the following details: \n" +
+                          "Name: " + name + "\n" +
+                          "Email Address: " + email + "\n";
+       
+        // Display input data in a dialog box before submitting the form
+        alert(dataPreview);
+    }
+};
+</script>
    </head>
    <body>
      
@@ -40,7 +97,7 @@
                      <a href="testimonials.html" class="nav__link">Testimonials</a>
                   </li>
 				  <li class="navbar">
-                     <a href="currency.html" class="nav__link">Currency</a>
+                     <a href="Currency.html" class="nav__link">Currency</a>
 					 
                   </li>
 				  <li class="navbar">
@@ -77,10 +134,10 @@
             </h2>
 
             <div class="contact__container container grid">
-               <form action="" class="contact__form" id="contact-form">
+               <form  class="contact__form" id="contact-form "name="contactForm" onsubmit="return validateForm()" method="post">
                   <div class="contact__group">
-                     <input type="text" name="user_name" required placeholder="Enter your name" class="contact__input">
-                     <input type="email" name="user_email" required placeholder="Enter your email" class="contact__input">
+                     <input type="text" name="name" required placeholder="Enter your name" id="nameErr" class="contact__input">
+                     <input type="email" name="email" required placeholder="Enter your email" id="emailErr" class="contact__input">
                   </div>
 
                   <textarea name="user_project" required placeholder="Enter your message" class="contact__input"></textarea>

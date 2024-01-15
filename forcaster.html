@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+
+      <link href="https://cdn.jsdelivr.net/npm/remixicon@3.0.0/fonts/remixicon.css" rel="stylesheet">
+
+      <link rel="stylesheet" href="assets/css/styles.css">
+
+      <title>Portfolio  </title>
+   </head>
+   <body>
+     
+      <header class="header" id="header">
+         <nav class="nav container">
+            <a href="index.html" class="logo">
+              Sandeep <span>Kaur</span>
+            </a>
+
+            <div class="menu" id="nav-menu">
+                 <ul class="list">
+                  
+
+                  <li class="navbar">
+                     <a href="about.html" class="nav__link">About</a>
+                  </li>
+
+                  <li class="navbar">
+                     <a href="academic.html" class="nav__link">Academic</a>
+                  </li>
+
+                  <li class="navbar">
+                     <a href="professional.html" class="nav__link">Professional history</a>
+                  </li>
+				  <li class="navbar">
+                     <a href="testimonials.html" class="nav__link">Testimonials</a>
+                  </li>
+				  <li class="navbar">
+                     <a href="Currency.html" class="nav__link">Currency</a>
+					 
+                  </li>
+				  <li class="navbar">
+                     <a href="forcaster.html" class="nav__link">Forcaster </a>
+					 
+                  </li>
+
+                  <li class="navbar">
+                     <a href="contact.html" class="nav__link">Contact</a>
+                  </li>
+               </ul>
+
+               <div class="nav__close" id="nav-close">
+                  <i class="ri-close-line"></i>
+               </div>
+            </div>
+
+            <div class="nav__toggle" id="nav-toggle">
+               <i class="ri-menu-line"></i>
+            </div>
+         </nav>
+      </header>
+<body>
+ <section class="about section" id="about">
+  <h2 class="section__title">
+                    Fuel Forcaster 
+                  </h2>
+    <div class="about__container container grid">
+        <header id="Heading" class="section__subtitle">Fuel Prices Forecaster</header>
+        <label for="year" class="section__subtitle">Year:</label>
+        <input type="number" id="year" placeholder="Enter year" class="contact__input">
+        <button id="ButtonClick" class="button contact__button">Get Prices</button>
+        <div class="forecaster-wrapper">
+            <canvas id="Fuel_Prices"></canvas>
+        </div>
+
+
+    </div>
+	</section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+   <script>
+const addButton = document.getElementById('ButtonClick')
+const inputYear = document.getElementById('year')
+const solid_Fuel = document.getElementById('Fuel_Prices');
+const Heading = document.getElementById('Heading')
+let solidFuelObj, gasFuelObj
+let labels = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+var chart
+
+
+const Forecasting = () => {
+
+    //solid forecasing
+    let year2023 = solidfuelPrices.slice(Math.max(solidfuelPrices.length - 12, 1))
+    let year2022 = solidFuelObj['2022']
+    let differenceSolid = year2023.reduce((partialSum, a) => partialSum + a, 0) / solidfuelPrices.slice(Math.max(solidfuelPrices.length - 12, 1)).length -
+        year2022.reduce((partialSum, a) => partialSum + a, 0) / solidFuelObj['2022'].length;
+    differenceSolid = Math.trunc(differenceSolid)
+    let year2024 = []
+
+    for (let i = 0; i < year2023.length; i++) {
+        year2024.push(year2023[i] + differenceSolid)
+    }
+    solidFuelObj = {...solidFuelObj, 2024: year2024 }
+
+
+    //gas forecasting
+    year2023 = gasFulePrices.slice(Math.max(gasFulePrices.length - 12, 1))
+    year2022 = solidFuelObj['2022']
+
+    differenceSolid = year2023.reduce((partialSum, a) => partialSum + a, 0) / gasFulePrices.slice(Math.max(gasFulePrices.length - 12, 1)).length -
+        year2022.reduce((partialSum, a) => partialSum + a, 0) / gasFuelObj['2022'].length;
+    console.log(year2023, year2024)
+    differenceSolid = Math.trunc(differenceSolid)
+    year2024 = []
+    console.log(differenceSolid)
+    for (let i = 0; i < year2023.length; i++) {
+        year2024.push(year2023[i] + differenceSolid)
+    }
+    gasFuelObj = {...gasFuelObj, 2024: year2024 }
+
+
+}
+
+const FuelByYEar = () => {
+    let year = 1990
+    let counter = 1
+
+    let curYear = parseInt(inputYear.value)
+    if (isNaN(curYear) || curYear < 1990 || curYear > 2024) {
+        alert('Enter Valid Values')
+        curYear = 2023
+        Heading.innerHTML = 'curYear > 2023Historic Data for Year: ' + curYear
+    } else if (curYear >= 1990 || curYear < 2024) {
+        Heading.innerHTML = 'Hoistoric Data for Year: ' + curYear
+    }
+
+    let solidFuelArray = [],
+        gasFuelArray = []
+
+    labels = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    for (let i = 0; i < solidfuelPrices.length; i++) {
+
+        if (counter == 12 || i == solidfuelPrices.length - 1) {
+
+            gasFuelArray.push(gasFulePrices[i])
+            solidFuelArray.push(solidfuelPrices[i])
+
+            gasFuelObj = {...gasFuelObj, [year]: gasFuelArray }
+            solidFuelObj = {...solidFuelObj, [year]: solidFuelArray }
+            solidFuelArray = []
+            gasFuelArray = []
+            counter = 1
+            year++
+
+
+
+        } else {
+
+            solidFuelArray.push(solidfuelPrices[i])
+            gasFuelArray.push(gasFulePrices[i])
+            counter++
+        }
+    }
+    counter = 1
+    for (let i = 0; i <= solidfuelPrices.length; i++) {
+
+        counter++
+    }
+
+    if (curYear > 2023) {
+        labels = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sept']
+        Heading.innerHTML = 'Forecasting Data for Year: ' + curYear
+        Forecasting()
+    }
+
+    const config = {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                    label: 'Solid Fuel Prices',
+                    data: solidFuelObj[curYear],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Gas Fuel Prices',
+                    data: gasFuelObj[curYear],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Chart.js Line Chart - Multi Axis'
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+
+                    // grid line settings
+                    grid: {
+                        drawOnChartArea: false, // only want the grid lines for one axis to show up
+                    },
+                },
+            }
+        },
+    };
+
+    try {
+        chart = new Chart(solid_Fuel, config)
+    } catch (err) {
+        chart.destroy()
+        chart = new Chart(solid_Fuel, config)
+    }
+
+
+    try {
+        chart.destroy()
+        chart = new Chart(solid_Fuel, config)
+    } catch (err) {
+        console.log(err)
+    }
+
+
+
+}
+
+addButton.addEventListener("click", e => {
+    e.preventDefault();
+    FuelByYEar();
+});
+</script>
+ <script src="assets/js/dataset.js"></script>
+   
+      <footer class="footer">
+         <div class="footer__container container grid">
+            <div>
+               <h1 class="footer__title">
+                  Sandeep <span>Kaur</span>
+               </h1>
+               
+               <h2 class="footer__education">
+                 Web Developer  
+               </h2>
+            </div>
+
+           <div class="footer__social">
+               <a href="https://www.facebook.com/profile.php?id=100089380832811" target="_blank" class="footer__social-link">
+                  <i class="ri-facebook-circle-line"></i>
+               </a>
+
+               <a href="#" target="_blank" class="footer__social-link">
+                  <i class="ri-instagram-line"></i>
+               </a>
+			   
+			   <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" target="_blank" class="footer__social-link">
+                <i class="ri-mail-fill"></i>
+               </a>
+			   
+			   <a href="https://www.linkedin.com/in/sandeep-kaur-a98824106/" target="_blank" class="footer__social-link">
+                 <i class="ri-linkedin-box-fill"></i>
+               </a>
+
+              
+            </div>
+
+            <span class="footer__copy">
+              deepkau123@gmail.com
+            </span>
+         </div>
+      </footer>
+
+      <a href="#" class="scrollup" id="scroll-up">
+         <i class="ri-arrow-up-line"></i>
+      </a>
+
+   
+      <script src="assets/js/scrollreveal.min.js"></script>
+
+      <script src="assets/js/main.js"></script>
+   </body>
+</html>
